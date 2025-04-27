@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center mb-4">My Bookings</h2>
+    {% if bookings %}
+        <div class="row">
+            {% for booking in bookings %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ booking.movie_name }}</h5>
+                        <div class="booking-details">
+                            <p><strong>Theatre:</strong> {{ booking.theatre_name }}</p>
+                            <p><strong>Date:</strong> {{ booking.show_date.strftime('%Y-%m-%d') if booking.show_date else 'N/A' }}</p>
+                            <p><strong>Time:</strong> {{ booking.show_time }}</p>
+                            <p><strong>Seats:</strong> {{ booking.seats_selected }}</p>
+                            {% if booking.snack_items %}
+                            <p><strong>Snacks:</strong> {{ booking.snack_items }} (Quantity: {{ booking.snack_quantity }})</p>
+                            {% endif %}
+                            <p><strong>Total Amount:</strong> ${{ booking.total_amount }}</p>
+                            <p><strong>Booking ID:</strong> {{ booking.booking_id }}</p>
+                            <p class="text-muted"><small>Booked on: {{ booking.created_at.strftime('%Y-%m-%d %H:%M:%S') if booking.created_at else 'N/A' }}</small></p>
+                        </div>
+                        <form action="{{ url_for('cancel_booking', booking_id=booking.booking_id) }}" method="POST" class="mt-3">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this booking?')">
+                                Cancel Booking
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            You haven't made any bookings yet.
+        </div>
+    {% endif %}
+    <div class="text-center mt-4">
+        <a href="{{ url_for('home') }}" class="btn btn-primary">Back to Movies</a>
+    </div>
+</div>
+{% endblock %} 

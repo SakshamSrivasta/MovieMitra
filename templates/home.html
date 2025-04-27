@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="text-center mb-4">Now Showing</h2>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for movie in movies %}
+    <div class="col">
+        <div class="card h-100">
+            {% set image_name = movie.name.lower().replace('the ', '').replace(' ', '') %}
+            <img src="{{ url_for('static', filename='movieposter/' + image_name + '.jpeg') }}"
+                 class="card-img-top"
+                 alt="{{ movie.name }}"
+                 style="height: 400px; object-fit: cover"
+                 onerror="if(this.src.includes('.jpeg')){this.src=this.src.replace('.jpeg','.jpg');}"
+            />
+            <div class="card-body">
+                <h5 class="card-title">{{ movie.name }}</h5>
+                <p class="card-text">
+                    <strong>Duration:</strong> {{ movie.duration }}<br>
+                    <strong>Language:</strong> {{ movie.language }}
+                </p>
+                <a href="{{ url_for('booking', movie_id=movie.id) }}" class="btn btn-primary">Book Now</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %} 
